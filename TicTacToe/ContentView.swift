@@ -8,14 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var boardState: BoardState = .init()
+    
+    @State var showSettingsSheet: Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                
+                // MARK: - Quick Game Board
+                Section {
+                    HStack {
+                        Spacer()
+                        GameBoard()
+                            .environmentObject(boardState)
+                        Spacer()
+                    }
+                }
+            }
+            .navigationTitle("TicTacToe")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Settings", systemImage: "gear") {
+                        showSettingsSheet.toggle()
+                    }.sheet(isPresented: $showSettingsSheet) {
+                        SettingsSheet(isPresented: $showSettingsSheet)
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 
